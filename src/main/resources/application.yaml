@@ -1,0 +1,9 @@
+# spring.application.name=webchat-server
+spring:
+    application:
+        name: webchat-server
+    datasource:
+        url: jdbc:mysql://localhost:3306/springTest
+        username: wind
+        password: 244100
+        driver-class-name: com.mysql.cj.jdbc.Driver
