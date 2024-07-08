@@ -15,6 +15,9 @@ public class UserServiceImpl implements UserService  {
     private UserMapper userMapper;
 
     public ServiceState register(String username, String password){
+        // 对传进来的username和password要进行格式验证，对于非法的格式不予执行，并返回ServiceState.INVALID_FORMAT
+        
+        //=========================================
         if(exist(username)==ServiceState.SUCCESS)
             return ServiceState.EXISTED_USER;
         if(!userMapper.addUser(username, password))
