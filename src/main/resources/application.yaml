@@ -7,3 +7,6 @@ spring:
         username: wind
         password: 244100
         driver-class-name: com.mysql.cj.jdbc.Driver
+    session:
+        jdbc:
+            initialize-schema: always
