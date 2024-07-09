@@ -10,3 +10,7 @@ spring:
     session:
         jdbc:
             initialize-schema: always
+server:
+    servlet:
+        session:
+            timeout: 3600
