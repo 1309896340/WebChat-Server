@@ -12,6 +12,9 @@ import com.webchat.webchat_server.type.ServiceState;
 import com.webchat.webchat_server.type.UserAdminMessage;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 // @CrossOrigin(origins = "http://127.0.0.1:5173", allowedHeaders = "*", allowCredentials = "true", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST})
@@ -63,4 +66,11 @@ public class UserAdminController {
         return responseJson;
     }
 
+    @GetMapping("/api/userinfo")
+    public String getUserInfo(HttpSession session) {
+        String username = (String)session.getAttribute("username");
+
+        return new String();
+    }
+    
 }
