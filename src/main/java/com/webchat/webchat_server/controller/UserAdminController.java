@@ -1,6 +1,8 @@
 package com.webchat.webchat_server.controller;
 
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +11,6 @@ import com.webchat.webchat_server.service.UserService;
 import com.webchat.webchat_server.type.ServiceState;
 import com.webchat.webchat_server.type.UserAdminMessage;
 
-// import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
@@ -28,7 +29,9 @@ public class UserAdminController {
     }
 
     @PostMapping("/api/login")
-    public String login(String username, String password, HttpSession session) {
+    public String login(@RequestBody Map<String, String> user, HttpSession session) {
+        String username = user.get("username");
+        String password = user.get("password");
         UserAdminMessage msg = new UserAdminMessage();
         if (userService.check(username, password) == ServiceState.SUCCESS) {
             msg.message = "登录成功";
@@ -44,7 +47,9 @@ public class UserAdminController {
     }
 
     @PostMapping("/api/register")
-    public String register(@RequestParam("username") String username, @RequestParam("password") String password) {
+    public String register(@RequestBody Map<String, String> user) {
+        String username = user.get("username");
+        String password = user.get("password");
         UserAdminMessage msg = new UserAdminMessage();
         if (userService.register(username, password) == ServiceState.SUCCESS) {
             msg.message = "注册成功";
@@ -53,7 +58,9 @@ public class UserAdminController {
             msg.message = "注册失败";
             msg.status = false;
         }
-        return JSON.toJSONString(msg);
+        String responseJson = JSON.toJSONString(msg);
+        System.out.println(responseJson);
+        return responseJson;
     }
 
 }

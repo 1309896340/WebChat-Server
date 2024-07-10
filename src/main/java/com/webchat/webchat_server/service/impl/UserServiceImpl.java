@@ -22,9 +22,6 @@ public class UserServiceImpl implements UserService {
         Matcher matcher = usernamePtn.matcher(username);
         if (!matcher.find())
             return ServiceState.INVALID_FORMAT;
-        // matcher = passwordPtn.matcher(password);
-        // if (!matcher.find())
-        //     return ServiceState.INVALID_FORMAT;
         System.out.println("register success!  username: " + username + " password: " + password);
         // =========================================
         if (exist(username) == ServiceState.SUCCESS)
