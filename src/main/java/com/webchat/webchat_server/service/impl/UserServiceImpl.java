@@ -15,17 +15,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
     private static final Pattern usernamePtn = Pattern.compile("^[a-zA-Z]\\w{3,}$");
-    private static final Pattern passwordPtn = Pattern
-            .compile("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$).{6,20}$");
+    // private static final Pattern passwordPtn = Pattern.compile("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$).{6,20}$");
 
     public ServiceState register(String username, String password) {
         // 对传进来的username和password要进行格式验证，对于非法的格式不予执行，并返回ServiceState.INVALID_FORMAT
         Matcher matcher = usernamePtn.matcher(username);
         if (!matcher.find())
             return ServiceState.INVALID_FORMAT;
-        matcher = passwordPtn.matcher(password);
-        if (!matcher.find())
-            return ServiceState.INVALID_FORMAT;
+        // matcher = passwordPtn.matcher(password);
+        // if (!matcher.find())
+        //     return ServiceState.INVALID_FORMAT;
         System.out.println("register success!  username: " + username + " password: " + password);
         // =========================================
         if (exist(username) == ServiceState.SUCCESS)

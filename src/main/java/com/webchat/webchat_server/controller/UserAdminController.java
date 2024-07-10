@@ -13,7 +13,8 @@ import com.webchat.webchat_server.type.UserAdminMessage;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@CrossOrigin(value = "http://127.0.0.1:5173", allowedHeaders = "*", allowCredentials = "true")
+// @CrossOrigin(origins = "http://127.0.0.1:5173", allowedHeaders = "*", allowCredentials = "true", maxAge = 3600, methods = {RequestMethod.GET, RequestMethod.POST})
+@CrossOrigin(origins = "*")
 public class UserAdminController {
     @Autowired
     private UserService userService;
@@ -43,7 +44,7 @@ public class UserAdminController {
     }
 
     @PostMapping("/api/register")
-    public String register(String username, String password) {
+    public String register(@RequestParam("username") String username, @RequestParam("password") String password) {
         UserAdminMessage msg = new UserAdminMessage();
         if (userService.register(username, password) == ServiceState.SUCCESS) {
             msg.message = "注册成功";
