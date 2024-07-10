@@ -16,10 +16,13 @@ enum Sex{
 @Getter
 @Setter
 public class UserInfo {
+    private int id;
+    private int uid;
     private String nickname;
     private Sex sex;
     private Date birth;
     private String email;
     private String qq;
     private String wechat;
+    private Date updateTime;
 }

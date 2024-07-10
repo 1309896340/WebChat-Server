@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.webchat.webchat_server.entity.UserEntity;
+import com.webchat.webchat_server.entity.UserInfo;
 import com.webchat.webchat_server.mapper.UserMapper;
 import com.webchat.webchat_server.service.UserService;
 import com.webchat.webchat_server.type.ServiceState;
@@ -54,6 +55,16 @@ public class UserServiceImpl implements UserService {
         if (!userMapper.updateUserPassword(username, newPassword))
             return ServiceState.DATABASE_ERROR;
         return ServiceState.SUCCESS;
+    }
+    
+    public UserInfo getUserInfo(int userId){
+        return userMapper.findUserInfoById(userId);
+    }
+    public UserInfo getUserInfo(String username){
+        return new UserInfo(0, 0, username, null, null, username, username, username, null); // 尚未实现
+    }
+    public ServiceState updateUserInfo(int userId, UserInfo newInfo){ // 尚未实现
+        return ServiceState.DATABASE_ERROR;
     }
 
 }

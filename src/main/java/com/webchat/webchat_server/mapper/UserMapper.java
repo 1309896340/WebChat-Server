@@ -2,6 +2,7 @@ package com.webchat.webchat_server.mapper;
 
 import org.apache.ibatis.annotations.*;
 import com.webchat.webchat_server.entity.UserEntity;
+import com.webchat.webchat_server.entity.UserInfo;
 
 @Mapper
 public interface UserMapper {
@@ -22,4 +23,11 @@ public interface UserMapper {
 
     @Delete("delete from user where id=#{id}")
     public boolean removeUserByUsername(String username);
+
+    
+    @Insert("insert into userinfo (uid, nickname, sex, birth, email, qq, wechat) values (#{uid}, #{nickname}, #{sex}, #{birth}, #{email}, #{qq}, #{wechat})")
+    public boolean addUserInfo(UserInfo userInfo, int id);
+
+    @Select("select * from userinfo where uid=#{uid}")
+    public UserInfo findUserInfoById(int id);
 }
