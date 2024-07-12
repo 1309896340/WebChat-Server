@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.webchat.webchat_server.entity.UserEntity;
-import com.webchat.webchat_server.entity.UserInfo;
+import com.webchat.webchat_server.entity.UserInfoEntity;
 import com.webchat.webchat_server.mapper.UserMapper;
 import com.webchat.webchat_server.service.UserService;
 import com.webchat.webchat_server.type.ServiceState;
@@ -16,7 +16,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
     private static final Pattern usernamePtn = Pattern.compile("^[a-zA-Z]\\w{3,}$");
-    // private static final Pattern passwordPtn = Pattern.compile("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$).{6,20}$");
+    // private static final Pattern passwordPtn =
+    // Pattern.compile("^(?![0-9]+$)(?![a-z]+$)(?![A-Z]+$)(?!([^(0-9a-zA-Z)])+$).{6,20}$");
 
     public ServiceState register(String username, String password) {
         // 对传进来的username和password要进行格式验证，对于非法的格式不予执行，并返回ServiceState.INVALID_FORMAT
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userMapper.findUserByUsername(username);
         if (user == null)
             return ServiceState.UNKNOWN_USER;
-        if (user.getPassword().equals(password))
+        if (!user.getPassword().equals(password))
             return ServiceState.WRONG_PASSWORD;
         return ServiceState.SUCCESS;
     }
@@ -56,15 +57,53 @@ public class UserServiceImpl implements UserService {
             return ServiceState.DATABASE_ERROR;
         return ServiceState.SUCCESS;
     }
+    public int getUserId(String username){
+        UserEntity user = userMapper.findUserByUsername(username);
+        if(user==null)
+            return -1;
+        return user.getId();
+    }
+    //==========================================================
+
+    public UserInfoEntity getUserInfo(int id) {
+        // 可能为空值
+        return userMapper.findUserInfoByUserId(id);
+    }
+
+    public UserInfoEntity getUserInfo(String username) {
+        // 可能为空值
+        UserEntity user = userMapper.findUserByUsername(username);
+        if (user == null)
+            return null;
+        return userMapper.findUserInfoByUserId(user.getId());
+    }
+
+    /* 
+    关于updateUserInfo的问题
+    由于UserInfoEntity中包含自动增长的主键、绑定User的外键、自动更新的时间
+    这些属性的存在导致直接映射不合适
+    */
+
+    public ServiceState updateUserInfo(int userId, UserInfoEntity newInfo) {
+        UserEntity user = userMapper.findUserById(userId);
+        UserInfoEntity userInfo = userMapper.findUserInfoByUserId(userId);
+        if(user==null)
+            return ServiceState.UNKNOWN_USER;
+        if (userInfo == null){
+            // User存在，UserInfo不存在，插入新记录
+            if(!userMapper.addUserInfo(userId, newInfo))
+                return ServiceState.DATABASE_ERROR;
+        }else{
+            // User存在，UserInfo也存在，进行更新
+            if(!userMapper.updateUserInfo(userInfo.getId(), newInfo))
+                return ServiceState.DATABASE_ERROR;
+        }
+        return ServiceState.SUCCESS;
+    }
     
-    public UserInfo getUserInfo(int userId){
-        return userMapper.findUserInfoById(userId);
-    }
-    public UserInfo getUserInfo(String username){
-        return new UserInfo(0, 0, username, null, null, username, username, username, null); // 尚未实现
-    }
-    public ServiceState updateUserInfo(int userId, UserInfo newInfo){ // 尚未实现
-        return ServiceState.DATABASE_ERROR;
+    public ServiceState updateUserInfo(String username, UserInfoEntity newInfo){
+        UserEntity user = userMapper.findUserByUsername(username);
+        return updateUserInfo(user.getId(), newInfo);
     }
 
 }

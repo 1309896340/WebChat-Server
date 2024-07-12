@@ -8,14 +8,22 @@ import lombok.Setter;
 import java.sql.Date;
 
 enum Sex{
-    male, female
+    unknown(0), male(1), female(2);
+
+    private final int id;
+    Sex(int id){
+        this.id = id;
+    }
+    public int getId(){
+        return this.id;
+    }
 }
 
 @Data
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserInfo {
+public class UserInfoEntity {
     private int id;
     private int uid;
     private String nickname;

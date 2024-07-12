@@ -2,7 +2,7 @@ package com.webchat.webchat_server.mapper;
 
 import org.apache.ibatis.annotations.*;
 import com.webchat.webchat_server.entity.UserEntity;
-import com.webchat.webchat_server.entity.UserInfo;
+import com.webchat.webchat_server.entity.UserInfoEntity;
 
 @Mapper
 public interface UserMapper {
@@ -26,9 +26,26 @@ public interface UserMapper {
 
     
     @Insert("insert into userinfo (uid, nickname, sex, birth, email, qq, wechat) values (#{uid}, #{nickname}, #{sex}, #{birth}, #{email}, #{qq}, #{wechat})")
-    public boolean addUserInfo(UserInfo userInfo, int id);
+    public boolean addUserInfo(int id, UserInfoEntity userInfo);
+
+    @Update("""
+        <script>
+            UPDATE userinfo
+            <set>
+                uid = #{userinfo.uid},
+                <if test='userinfo.nickname !=null'> nickname=#{userinfo.nickname}, </if>
+                <if test='userinfo.sex !=null'> sex=#{userinfo.sex}, </if>
+                <if test='userinfo.birth !=null'> birth=#{userinfo.birth}, </if>
+                <if test='userinfo.email !=null'> email=#{userinfo.email}, </if>
+                <if test='userinfo.qq !=null'> qq=#{userinfo.qq}, </if>
+            </set>
+            where id=#{id}
+        </script>
+            """)
+    public boolean updateUserInfo(int id, UserInfoEntity userInfo);
+    
 
     @Select("select * from userinfo where uid=#{uid}")
-    public UserInfo findUserInfoById(int id);
+    public UserInfoEntity findUserInfoByUserId(int uid);
 
 }

@@ -2,7 +2,7 @@ create table userInfo(
 	id int primary key auto_increment,
 	uid int not null,
 	nickname varchar(30),
-	sex enum('male', 'female'),
+	sex enum('null','male', 'female'),
 	birth date,
 	email varchar(40),
 	qq varchar(30),
