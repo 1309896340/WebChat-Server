@@ -30,4 +30,5 @@ public interface UserMapper {
 
     @Select("select * from userinfo where uid=#{uid}")
     public UserInfo findUserInfoById(int id);
+
 }
