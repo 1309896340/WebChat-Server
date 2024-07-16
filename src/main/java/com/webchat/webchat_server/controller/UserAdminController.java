@@ -1,5 +1,6 @@
 package com.webchat.webchat_server.controller;
 
+import java.util.Enumeration;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +13,10 @@ import com.webchat.webchat_server.type.ServiceState;
 import com.webchat.webchat_server.type.UserAdminMessage;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.webchat.webchat_server.type.MessageState;
-import org.springframework.web.bind.annotation.RequestParam;;
 
 @RestController
-// @CrossOrigin(origins = "http://127.0.0.1:5173", allowedHeaders = "*",
-// allowCredentials = "true", maxAge = 3600, methods = {RequestMethod.GET,
-// RequestMethod.POST})
-@CrossOrigin(origins = "*")
 public class UserAdminController {
     @Autowired
     private UserService userService;
@@ -70,9 +63,11 @@ public class UserAdminController {
     }
 
     @GetMapping("/api/userinfo")
-    public String getUserInfo(HttpSession session) {
+    public String getUserInfo(@SessionAttribute(name="username",required = false) String username) {
         UserAdminMessage msg = new UserAdminMessage();
-        String username = (String) session.getAttribute("username");
+
+        System.out.println("进入到/userinfo控制器\nusername = "+ username);
+
         if (username == null) {
             // session已经过期，需要重新登录，跳转到登录界面
             msg.status = MessageState.SESSION_EXPIRED;
